@@ -188,11 +188,12 @@
                             <Stack direction="column"
                                    justifyContent="center"
                                    alignItems="center">
-                                <Avatar src={"/image/bear.jpeg"} sx={{
+                                <Avatar src={"image/bear.jpeg"} sx={{
                                     width: 48, height: 48,
                                     border: 2
                                 }}/>
                                 <AvatarGroup max={10} sx={{height: 50}}>
+                                    <Avatar>{record1.split('w').length - 1}</Avatar>
                                     {record1.split(',').reverse().map(showRecord)}
                                 </AvatarGroup>
                                 <Typography variant="h4" component="h2"
@@ -203,11 +204,12 @@
                             <Stack direction="column"
                                    justifyContent="center"
                                    alignItems="center">
-                                <Avatar src={"/image/dad.avif"} sx={{
+                                <Avatar src={"image/dad.avif"} sx={{
                                     width: 48, height: 48,
                                     border: 2
                                 }}/>
                                 <AvatarGroup max={10} sx={{height: 50}}>
+                                    <Avatar>{record2.split('w').length - 1}</Avatar>
                                     {record2.split(',').reverse().map(showRecord)}
                                 </AvatarGroup>
                                 <Typography variant="h4" component="h2"

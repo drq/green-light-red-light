@@ -41,7 +41,8 @@
         Stack,
         Avatar,
         Icon,
-        Button
+        Button,
+        AvatarGroup
     } = MaterialUI;
 
     // Create a theme instance.
@@ -66,10 +67,18 @@
     }
 
     function App() {
+        const defaultMessage = "Shall we play the red light green light game?";
+        const babaWinMessage = "Baba wins!";
+        const nathanWinMessage = "Nathan wins!";
+        const tieMessage = "It's a tie!";
+
         const [light, setLight] = window.React.useState('red');
+        const [message, setMessage] = window.React.useState(defaultMessage);
         const [gap, setGap] = window.React.useState(getRandomInt(3, 10) * 1000);
         const [score1, setScore1] = window.React.useState(null);
         const [score2, setScore2] = window.React.useState(null);
+        const [record1, setRecord1] = window.React.useState('');
+        const [record2, setRecord2] = window.React.useState('');
 
         const changeColorJob = setTimeout(() => {
             setLight(light === "green" ? "red" : "green")
@@ -93,15 +102,42 @@
         window.React.useEffect(() => {
             if (light === "red") {
                 const trafficLightElem = document.getElementById("traffic-light");
-                trafficLightElem.setAttribute("data-timestamp", new Date().getTime())
+                trafficLightElem.setAttribute("data-timestamp", new Date().getTime());
+                setMessage(defaultMessage);
+                setScore1(null);
+                setScore2(null);
             }
         }, [light]);
 
-            return (
+        window.React.useEffect(() => {
+            if (score1 && score2) {
+                if (score1 < score2) {
+                    setMessage(nathanWinMessage);
+                    setRecord1(record1 + ',w');
+                    setRecord2(record2 + ',l');
+                } else if (score2 < score1) {
+                    setMessage(babaWinMessage);
+                    setRecord1(record1 + ',l');
+                    setRecord2(record2 + ',w');
+                } else if (score2 === score1) {
+                    setMessage(tieMessage);
+                }
+            }
+        }, [score1, score2]);
+
+        const showRecord = (record, key) => {
+            if (record === 'w')
+                return <Avatar sx={{bgcolor: 'green'}} key={key}><Icon>check</Icon></Avatar>
+            if (record === 'l')
+                return <Avatar sx={{bgcolor: 'red'}} key={key}><Icon>close</Icon></Avatar>
+        }
+
+        return (
             <Container>
                 <Typography variant="h4" component="h1" sx={{
                     textAlign: "center",
-                    margin: "48px"
+                    margin: "48px",
+                    fontSize: "48px"
                 }}>
                     Green Light - Red Light
                 </Typography>
@@ -111,33 +147,54 @@
                     alignItems="center"
                     spacing={6}
                     sx={{
-                        height: "50vh"
+                        minHeight: "50vh"
                     }}>
                     <Avatar
                         id="traffic-light"
                         data-light={light}
                         sx={{
-                            width: 128, height: 128,
+                            width: 256, height: 256,
                             backgroundColor: `${light}`
                         }}>
                         <Icon>traffic</Icon>
                     </Avatar>
+                    <Typography variant="h4" component="h3">{message}</Typography>
                     <Grid container
                           spacing={2}
                           direction="row"
                           justifyContent="center"
                           alignItems="center">
                         <Grid item xs={6} textAlign="center">
-                            <Avatar src={"/image/bear.jpeg"}/>: {score1 || <Typography variant="h4" component="h2">{score1}</Typography>}
+                            <Stack direction="column"
+                                   justifyContent="center"
+                                   alignItems="center">
+                                <Avatar src={"/image/bear.jpeg"} sx={{
+                                    width: 48, height: 48,
+                                }}/>
+                                <Typography variant="h4" component="h2">{`${score1 ? score1 : ''}`}</Typography>
+                                <AvatarGroup max={10}>
+                                    {record1.split(',').reverse().map(showRecord)}
+                                </AvatarGroup>
+                            </Stack>
                         </Grid>
                         <Grid item xs={6} textAlign="center">
-                            Baba: {score2 || <Typography variant="h4" component="h2">{score2}</Typography>}
+                            <Stack direction="column"
+                                   justifyContent="center"
+                                   alignItems="center">
+                                <Avatar src={"/image/dad.avif"} sx={{
+                                    width: 48, height: 48,
+                                }}/>
+                                <Typography variant="h4" component="h2">{`${score2 ? score2 : ''}`}</Typography>
+                                <AvatarGroup max={10}>
+                                    {record2.split(',').reverse().map(showRecord)}
+                                </AvatarGroup>
+                            </Stack>
                         </Grid>
                     </Grid>
                     <Button variant="contained" color="error" size="large" onClick={() => {
-                        clearTimeout(changeColorJob);
+                        window.location.reload();
                     }}>
-                        Stop
+                        Reset
                     </Button>
                 </Stack>
             </Container>

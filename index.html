@@ -67,7 +67,7 @@
     }
 
     function App() {
-        const defaultMessage = "Shall we play the red light green light game?";
+        const defaultMessage = "Shall we play the green light red light game?";
         const babaWinMessage = "Baba wins!";
         const nathanWinMessage = "Nathan wins!";
         const tieMessage = "It's a tie!";
@@ -151,7 +151,7 @@
                     margin: "48px",
                     fontSize: "48px"
                 }}>
-                    Green Light - Red Light
+                    Green Light <Icon sx={{ fontSize: 40 }}>traffic</Icon> Red Light
                 </Typography>
                 <Stack
                     direction="column"
@@ -168,7 +168,7 @@
                             width: 256, height: 256,
                             backgroundColor: `${light}`
                         }}>
-                        <Icon>traffic</Icon>
+                        <Icon sx={{ fontSize: 120 }}>traffic</Icon>
                     </Avatar>
                     <Typography variant="h4" component="h3" sx={{width: "50vw", textAlign: "center"}}>{message}</Typography>
                     <Grid container
@@ -180,6 +180,7 @@
                                    alignItems="center">
                                 <Avatar src={"/image/bear.jpeg"} sx={{
                                     width: 48, height: 48,
+                                    border: 2
                                 }}/>
                                 <Typography variant="h4" component="h2">{`${score1 ? score1 : ''}`}</Typography>
                                 <AvatarGroup max={10}>
@@ -193,6 +194,7 @@
                                    alignItems="center">
                                 <Avatar src={"/image/dad.avif"} sx={{
                                     width: 48, height: 48,
+                                    border: 2
                                 }}/>
                                 <Typography variant="h4" component="h2">{`${score2 ? score2 : ''}`}</Typography>
                                 <AvatarGroup max={10}>

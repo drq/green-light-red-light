@@ -72,6 +72,9 @@
         const nathanWinMessage = "Nathan wins!";
         const tieMessage = "It's a tie!";
 
+        const wrongKeyMessage = "Nathan shall press 'a' key & Baba shall press 'l' key!";
+        const noCheatingMessage = "No cheating!";
+
         const [light, setLight] = window.React.useState('red');
         const [message, setMessage] = window.React.useState(defaultMessage);
         const [gap, setGap] = window.React.useState(getRandomInt(3, 6) * 1000);
@@ -91,13 +94,19 @@
                 const currentLight = trafficLightElem.getAttribute("data-light")
                 const played = trafficLightElem.getAttribute("data-played");
                 const currentTimestamp = trafficLightElem.getAttribute("data-timestamp");
-                if (played === 'false') {
-                    if (key === 'a' && currentLight === 'green') {
+                if (played === 'false' && currentLight === 'green') {
+                    if (key === 'a') {
                         setScore1(new Date().getTime() - currentTimestamp);
                     }
-                    if (key === 'l' && currentLight === 'green') {
+                    if (key === 'l') {
                         setScore2(new Date().getTime() - currentTimestamp);
                     }
+                }
+                if (key !== 'a' && key !== 'l') {
+                    setMessage(wrongKeyMessage);
+                }
+                if (currentLight !== 'green') {
+                    setMessage(noCheatingMessage);
                 }
             });
         }, []);
@@ -151,7 +160,7 @@
                     margin: "48px",
                     fontSize: "48px"
                 }}>
-                    Green Light <Icon sx={{ fontSize: 40 }}>traffic</Icon> Red Light
+                    Green Light <Icon sx={{fontSize: 40}}>traffic</Icon> Red Light
                 </Typography>
                 <Stack
                     direction="column"
@@ -168,12 +177,13 @@
                             width: 256, height: 256,
                             backgroundColor: `${light}`
                         }}>
-                        <Icon sx={{ fontSize: 120 }}>traffic</Icon>
+                        <Icon sx={{fontSize: 120}}>traffic</Icon>
                     </Avatar>
-                    <Typography variant="h4" component="h3" sx={{width: "50vw", textAlign: "center"}}>{message}</Typography>
+                    <Typography variant="h4" component="h3"
+                                sx={{width: "50vw", textAlign: "center"}}>{message}</Typography>
                     <Grid container
                           spacing={2}
-                          >
+                    >
                         <Grid item xs={6} textAlign="center">
                             <Stack direction="column"
                                    justifyContent="center"
@@ -182,10 +192,11 @@
                                     width: 48, height: 48,
                                     border: 2
                                 }}/>
-                                <Typography variant="h4" component="h2">{`${score1 ? score1 : ''}`}</Typography>
-                                <AvatarGroup max={10}>
+                                <AvatarGroup max={10} sx={{height: 50}}>
                                     {record1.split(',').reverse().map(showRecord)}
                                 </AvatarGroup>
+                                <Typography variant="h4" component="h2"
+                                            sx={{height: 50}}>{`${score1 ? score1 : ''}`}</Typography>
                             </Stack>
                         </Grid>
                         <Grid item xs={6} textAlign="center">
@@ -196,10 +207,11 @@
                                     width: 48, height: 48,
                                     border: 2
                                 }}/>
-                                <Typography variant="h4" component="h2">{`${score2 ? score2 : ''}`}</Typography>
-                                <AvatarGroup max={10}>
+                                <AvatarGroup max={10} sx={{height: 50}}>
                                     {record2.split(',').reverse().map(showRecord)}
                                 </AvatarGroup>
+                                <Typography variant="h4" component="h2"
+                                            sx={{height: 50}}>{`${score2 ? score2 : ''}`}</Typography>
                             </Stack>
                         </Grid>
                     </Grid>

@@ -103,9 +103,9 @@
         }, []);
 
         window.React.useEffect(() => {
+            const trafficLightElem = document.getElementById("traffic-light");
+            trafficLightElem.setAttribute("data-timestamp", new Date().getTime());
             if (light === "red") {
-                const trafficLightElem = document.getElementById("traffic-light");
-                trafficLightElem.setAttribute("data-timestamp", new Date().getTime());
                 trafficLightElem.setAttribute("data-played", 'false');
                 setMessage(defaultMessage);
                 setScore1(null);

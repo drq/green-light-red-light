@@ -74,7 +74,7 @@
 
         const [light, setLight] = window.React.useState('red');
         const [message, setMessage] = window.React.useState(defaultMessage);
-        const [gap, setGap] = window.React.useState(getRandomInt(3, 10) * 1000);
+        const [gap, setGap] = window.React.useState(getRandomInt(3, 6) * 1000);
         const [score1, setScore1] = window.React.useState(null);
         const [score2, setScore2] = window.React.useState(null);
         const [record1, setRecord1] = window.React.useState('');
@@ -89,12 +89,15 @@
                 const key = event.key;
                 const trafficLightElem = document.getElementById("traffic-light");
                 const currentLight = trafficLightElem.getAttribute("data-light")
-                const currentTimestamp = trafficLightElem.getAttribute("data-timestamp")
-                if (key === 'a' && currentLight === 'green') {
-                    setScore1(new Date().getTime() - currentTimestamp);
-                }
-                if (key === 'l' && currentLight === 'green') {
-                    setScore2(new Date().getTime() - currentTimestamp);
+                const played = trafficLightElem.getAttribute("data-played");
+                const currentTimestamp = trafficLightElem.getAttribute("data-timestamp");
+                if (played === 'false') {
+                    if (key === 'a' && currentLight === 'green') {
+                        setScore1(new Date().getTime() - currentTimestamp);
+                    }
+                    if (key === 'l' && currentLight === 'green') {
+                        setScore2(new Date().getTime() - currentTimestamp);
+                    }
                 }
             });
         }, []);
@@ -103,6 +106,7 @@
             if (light === "red") {
                 const trafficLightElem = document.getElementById("traffic-light");
                 trafficLightElem.setAttribute("data-timestamp", new Date().getTime());
+                trafficLightElem.setAttribute("data-played", 'false');
                 setMessage(defaultMessage);
                 setScore1(null);
                 setScore2(null);
@@ -111,6 +115,8 @@
 
         window.React.useEffect(() => {
             if (score1 && score2) {
+                const trafficLightElem = document.getElementById("traffic-light");
+                trafficLightElem.setAttribute("data-played", 'true');
                 if (score1 < score2) {
                     setMessage(nathanWinMessage);
                     setRecord1(record1 + ',w');
@@ -133,7 +139,13 @@
         }
 
         return (
-            <Container>
+            <Container sx={{
+                height: "100vh",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+            }}>
                 <Typography variant="h4" component="h1" sx={{
                     textAlign: "center",
                     margin: "48px",
@@ -158,12 +170,10 @@
                         }}>
                         <Icon>traffic</Icon>
                     </Avatar>
-                    <Typography variant="h4" component="h3">{message}</Typography>
+                    <Typography variant="h4" component="h3" sx={{width: "50vw", textAlign: "center"}}>{message}</Typography>
                     <Grid container
                           spacing={2}
-                          direction="row"
-                          justifyContent="center"
-                          alignItems="center">
+                          >
                         <Grid item xs={6} textAlign="center">
                             <Stack direction="column"
                                    justifyContent="center"

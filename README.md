@@ -1,1 +1,3 @@
-# green-light-red-light
+# Green Light - Red Light
+
+Fun game for Nathan and Baba

@@ -87,27 +87,31 @@
             setLight(light === "green" ? "red" : "green")
         }, gap);
 
+        const eventHandler = (key) => {
+            const trafficLightElem = document.getElementById("traffic-light");
+            const currentLight = trafficLightElem.getAttribute("data-light")
+            const played = trafficLightElem.getAttribute("data-played");
+            const currentTimestamp = trafficLightElem.getAttribute("data-timestamp");
+            if (played === 'false' && currentLight === 'green') {
+                if (key === 'a') {
+                    setScore1(new Date().getTime() - currentTimestamp);
+                }
+                if (key === 'l') {
+                    setScore2(new Date().getTime() - currentTimestamp);
+                }
+            }
+            if (key !== 'a' && key !== 'l') {
+                setMessage(wrongKeyMessage);
+            }
+            if (currentLight !== 'green') {
+                setMessage(noCheatingMessage);
+            }
+        }
+
         window.React.useEffect(() => {
             document.addEventListener("keyup", (event) => {
                 const key = event.key;
-                const trafficLightElem = document.getElementById("traffic-light");
-                const currentLight = trafficLightElem.getAttribute("data-light")
-                const played = trafficLightElem.getAttribute("data-played");
-                const currentTimestamp = trafficLightElem.getAttribute("data-timestamp");
-                if (played === 'false' && currentLight === 'green') {
-                    if (key === 'a') {
-                        setScore1(new Date().getTime() - currentTimestamp);
-                    }
-                    if (key === 'l') {
-                        setScore2(new Date().getTime() - currentTimestamp);
-                    }
-                }
-                if (key !== 'a' && key !== 'l') {
-                    setMessage(wrongKeyMessage);
-                }
-                if (currentLight !== 'green') {
-                    setMessage(noCheatingMessage);
-                }
+                eventHandler(key);
             });
         }, []);
 
@@ -188,10 +192,12 @@
                             <Stack direction="column"
                                    justifyContent="center"
                                    alignItems="center">
-                                <Avatar src={"image/bear.jpeg"} sx={{
-                                    width: 48, height: 48,
-                                    border: 2
-                                }}/>
+                                <Avatar src={"image/bear.jpeg"}
+                                        onClick={() => eventHandler('a')}
+                                        sx={{
+                                            width: 48, height: 48,
+                                            border: 2
+                                        }}/>
                                 <AvatarGroup max={10} sx={{height: 50}}>
                                     <Avatar>{record1.split('w').length - 1}</Avatar>
                                     {record1.split(',').reverse().map(showRecord)}
@@ -204,10 +210,12 @@
                             <Stack direction="column"
                                    justifyContent="center"
                                    alignItems="center">
-                                <Avatar src={"image/dad.avif"} sx={{
-                                    width: 48, height: 48,
-                                    border: 2
-                                }}/>
+                                <Avatar src={"image/dad.avif"}
+                                        onClick={() => eventHandler('l')}
+                                        sx={{
+                                            width: 48, height: 48,
+                                            border: 2
+                                        }}/>
                                 <AvatarGroup max={10} sx={{height: 50}}>
                                     <Avatar>{record2.split('w').length - 1}</Avatar>
                                     {record2.split(',').reverse().map(showRecord)}
